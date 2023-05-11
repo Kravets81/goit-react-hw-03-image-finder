@@ -10,14 +10,14 @@ import 'react-toastify/dist/ReactToastify.css';
 export class App extends Component {
   state = {
     hits: [],
-    page: 4,
+    page: 1,
     loading: false,
     error: null,
     emptyResults: false,
   };
 
   handleFormSubmit = async searchQuery => {
-    this.setState({ loading: true });
+    this.setState({ loading: true, searchQuery });
 
     try {
       const response = await fatchImages(searchQuery);
@@ -34,8 +34,8 @@ export class App extends Component {
     }
   };
 
-  handleLoadMoreButtonClick = async nextPage => {
-    const { page } = this.state;
+  handleLoadMoreButtonClick = async () => {
+    const { page, searchQuery } = this.state;
 
     this.setState({
       loading: true,
@@ -43,7 +43,7 @@ export class App extends Component {
     });
 
     try {
-      const response = await fatchImages(nextPage, page + 1);
+      const response = await fatchImages(searchQuery, page + 1);
       this.setState(prevState => ({
         hits: [...prevState.hits, ...response],
       }));
